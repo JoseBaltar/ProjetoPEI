@@ -49,7 +49,7 @@
     
     <!-- Finalmente, CADA LINHA DE RECEITA refere OS PRODUTOS e a sua quantidade -->
     <xs:complexType name="typeReceiptLine">
-        <xs:sequence>
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
             <xs:element name="Product" type="typeProduto"/>
             <xs:element name="ProductUnitPrice" type="cmn:pricetype"/>
             <xs:element name="Order(quantidade)" type="xs:unsignedInt"/>
