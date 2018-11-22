@@ -6,7 +6,7 @@
            elementFormDefault="qualified">
     
 	<xs:import schemaLocation="CommonSchema.xsd" 
-			   namespace="ProjetoPEI/Grupo<>/Entrega1/CommonSchema"/>
+			   namespace="ProjetoPEI/Grupo/Entrega1/CommonSchema"/>
 
 	<xs:simpletype name="nametype">
 		<xs:restriction base="xs:string"/>
