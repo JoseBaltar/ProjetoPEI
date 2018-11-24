@@ -35,10 +35,6 @@
             <xs:fractionDigits value="2"/>
         </xs:restriction>
     </xs:simpleType>
-
-    <xs:simpletype name="phonetype">
-        <xs:restriction base="xs:integer" totalDigits="9"/>
-    </xs:simpletype>
     
     <xs:simpleType name="baseMoeda">
         <xs:restriction base="xs:string">
