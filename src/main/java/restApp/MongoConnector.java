@@ -1,5 +1,7 @@
 package restApp;
 
+import org.xml.sax.SAXException;
+import solr.SolrConnector;
 import transformer.XSLTransformer;
 import validator.XMLvalidator;
 
@@ -13,6 +15,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -28,9 +34,11 @@ public class MongoConnector {
 
     private MongoClient mongoClient;
     private static final String noSuchCollectionMsg = "Collection does not exist!";
+    private SolrConnector solrConnector;
 
     public MongoConnector() {
         mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+        solrConnector = new SolrConnector();
     }
 
     /**
@@ -151,6 +159,7 @@ public class MongoConnector {
 
         /*o resultado da pesquisa so vai devolver 1 documento, no entanto deixa-se ficar este ciclo while para a
         'flexibilidade' deste método. */
+        String fxmlName="";
         while (it.hasNext()) {
             Document obj = (Document) it.next();
             //Formata a data ISODate para um formato "xs:dateTime"
@@ -187,11 +196,12 @@ public class MongoConnector {
             String filesDir = "XMLgerados_XSDschemas_XSLTtemplate/";
             String namespaceXmlName = XSLTransformer.transform(xmlTotal.toString(), filesDir + "XSLTdefinicaoNamespaceXML.xsl",
                     filesDir + "XMLgerados/", "XMLauditoria");
-            String indexingXmlName = XSLTransformer.transform(xmlTotal.toString(), filesDir + "XSLTdefinicaoXMLIndexacaoApacheSolr.xsl",
-                    filesDir + "XMLgerados/SolrIndexing/", "XMLauditoriaIndexing");
-            System.out.println("\nFICHEIROS_CRIADOS:\n-> namespaceXML: " + namespaceXmlName + " | dir: " + filesDir + "XMLgerados/ \n" +
-                    "\n-> indexingXML: " + indexingXmlName + " | dir: " + filesDir + "XMLgerados/SolrIndexing/ \n");
+            fxmlName= System.getProperty("user.dir")+"\\XMLgerados_XSDschemas_XSLTtemplate\\XMLgerados\\"+xmlName;
+            File xmlfile = new File(fxmlName);
+            solrConnector.addDocument(xmlfile);
         }
+
+
     }
 
     /**
