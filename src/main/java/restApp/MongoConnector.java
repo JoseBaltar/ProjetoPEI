@@ -1,6 +1,5 @@
 package restApp;
 
-import org.xml.sax.SAXException;
 import solr.SolrConnector;
 import transformer.XSLTransformer;
 import validator.XMLvalidator;
@@ -196,9 +195,14 @@ public class MongoConnector {
             String filesDir = "XMLgerados_XSDschemas_XSLTtemplate/";
             String namespaceXmlName = XSLTransformer.transform(xmlTotal.toString(), filesDir + "XSLTdefinicaoNamespaceXML.xsl",
                     filesDir + "XMLgerados/", "XMLauditoria");
-            fxmlName= System.getProperty("user.dir")+"\\XMLgerados_XSDschemas_XSLTtemplate\\XMLgerados\\"+xmlName;
-            File xmlfile = new File(fxmlName);
-            solrConnector.addDocument(xmlfile);
+            String indexingXmlName = XSLTransformer.transform(xmlTotal.toString(), filesDir + "XSLTdefinicaoXMLIndexacaoApacheSolr.xsl",
+                    filesDir + "XMLgerados/SolrIndexing/", "XMLauditoriaIndexing");
+            System.out.println("\nFICHEIROS_CRIADOS:\n-> namespaceXML: " + namespaceXmlName + " | dir: " + filesDir + "XMLgerados/ \n" +
+                    "\n-> indexingXML: " + indexingXmlName + " | dir: " + filesDir + "XMLgerados/SolrIndexing/ \n");
+            File xmlIndex = new File(
+                    ".\\XMLgerados_XSDschemas_XSLTtemplate\\XMLgerados\\SolrIndexing\\"+indexingXmlName);
+            solrConnector.addDocument(xmlIndex);
+
         }
 
 
